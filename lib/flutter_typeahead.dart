@@ -1212,10 +1212,11 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
                   style: TextStyle(
                       color: Theme.of(context).disabledColor, fontSize: 18.0),
                 ),
+                Padding(padding: EdgeInsets.only(top: 10),),
                 FlatButton(
                   padding: const EdgeInsets.all(8.0),
-                  textColor: Colors.teal,
-                  color: Colors.transparent,
+                  textColor: Colors.white,
+                  color: Colors.teal,
                   child: Text("Create"),
                   onPressed: () {
                     widget.onBtnCreatePressedCallBack();
