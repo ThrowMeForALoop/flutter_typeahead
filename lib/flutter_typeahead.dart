@@ -1202,9 +1202,12 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
   Widget createNoItemsFoundWidget() {
     return widget.noItemsFoundBuilder != null
         ? widget.noItemsFoundBuilder(context)
-        : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
+        : Align(
+            alignment: Alignment.center,
+            child: Container(
+                //  margin:  EdgeInsets.all(5),
+                // padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 120),
+                child: Column(
               children: <Widget>[
                 Text(
                   'No Items Found!',
@@ -1212,7 +1215,9 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
                   style: TextStyle(
                       color: Theme.of(context).disabledColor, fontSize: 18.0),
                 ),
-                Padding(padding: EdgeInsets.only(top: 10),),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                ),
                 FlatButton(
                   padding: const EdgeInsets.all(8.0),
                   textColor: Colors.white,
@@ -1223,7 +1228,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
                   },
                 )
               ],
-            ));
+            )));
   }
 
   Widget createSuggestionsWidget() {
