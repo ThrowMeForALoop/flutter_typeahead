@@ -69,6 +69,9 @@ class NavigationExample extends StatelessWidget {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ProductPage(product: suggestion)));
             },
+            onBtnCreatePressedCallBack: () {
+              print("call back");
+            }
           ),
         ],
       ),
@@ -103,6 +106,9 @@ class _FormExampleState extends State<FormExample> {
               ),
               suggestionsCallback: (pattern) {
                 return CitiesService.getSuggestions(pattern);
+              },
+              onBtnCreatePressedCallBack: () {
+                print("Create something");
               },
               itemBuilder: (context, suggestion) {
                 return ListTile(
@@ -175,6 +181,9 @@ class ScrollExample extends StatelessWidget {
         },
         onSuggestionSelected: (String suggestion) {
           print("Suggestion selected");
+        },
+        onBtnCreatePressedCallBack: () {
+          print("abcxys");
         },
       ),
       SizedBox(height: 500),
