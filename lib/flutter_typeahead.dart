@@ -236,6 +236,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 typedef FutureOr<List<T>> SuggestionsCallback<T>(String pattern);
 typedef Widget ItemBuilder<T>(BuildContext context, T itemData);
 typedef void SuggestionSelectionCallback<T>(T suggestion);
+// typedef void OnBtnCreatePressedCallBack();
+
 typedef Widget ErrorBuilder(BuildContext context, Object error);
 
 typedef AnimationTransitionBuilder(
@@ -270,6 +272,7 @@ class TypeAheadFormField<T> extends FormField<String> {
           const SuggestionsBoxDecoration(),
       SuggestionsBoxController suggestionsBoxController,
       @required SuggestionSelectionCallback<T> onSuggestionSelected,
+      @required VoidCallback onBtnCreatePressedCallBack,
       @required ItemBuilder<T> itemBuilder,
       @required SuggestionsCallback<T> suggestionsCallback,
       double suggestionsBoxVerticalOffset: 5.0,
@@ -318,6 +321,7 @@ class TypeAheadFormField<T> extends FormField<String> {
                 ),
                 suggestionsBoxVerticalOffset: suggestionsBoxVerticalOffset,
                 onSuggestionSelected: onSuggestionSelected,
+                onBtnCreatePressedCallBack: onBtnCreatePressedCallBack,
                 itemBuilder: itemBuilder,
                 suggestionsCallback: suggestionsCallback,
                 animationStart: animationStart,
@@ -434,6 +438,7 @@ class TypeAheadField<T> extends StatefulWidget {
   /// }
   /// ```
   final SuggestionsCallback<T> suggestionsCallback;
+  final VoidCallback onBtnCreatePressedCallBack;
 
   /// Called when a suggestion is tapped.
   ///
@@ -665,6 +670,7 @@ class TypeAheadField<T> extends StatefulWidget {
       @required this.suggestionsCallback,
       @required this.itemBuilder,
       @required this.onSuggestionSelected,
+      @required this.onBtnCreatePressedCallBack,
       this.textFieldConfiguration: const TextFieldConfiguration(),
       this.suggestionsBoxDecoration: const SuggestionsBoxDecoration(),
       this.debounceDuration: const Duration(milliseconds: 300),
@@ -688,6 +694,7 @@ class TypeAheadField<T> extends StatefulWidget {
       : assert(suggestionsCallback != null),
         assert(itemBuilder != null),
         assert(onSuggestionSelected != null),
+        // assert(onBtnCreatePressedCallBack != null),
         assert(animationStart != null &&
             animationStart >= 0.0 &&
             animationStart <= 1.0),
@@ -849,6 +856,9 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
           }
           widget.onSuggestionSelected(selection);
         },
+        onBtnCreatePressedCallBack: () {
+          widget.onBtnCreatePressedCallBack();
+        },
         itemBuilder: widget.itemBuilder,
         direction: _suggestionsBox.direction,
         hideOnLoading: widget.hideOnLoading,
@@ -942,6 +952,7 @@ class _SuggestionsList<T> extends StatefulWidget {
   final bool getImmediateSuggestions;
   final SuggestionSelectionCallback<T> onSuggestionSelected;
   final SuggestionsCallback<T> suggestionsCallback;
+  final VoidCallback onBtnCreatePressedCallBack;
   final ItemBuilder<T> itemBuilder;
   final SuggestionsBoxDecoration decoration;
   final Duration debounceDuration;
@@ -963,6 +974,7 @@ class _SuggestionsList<T> extends StatefulWidget {
     this.getImmediateSuggestions: false,
     this.onSuggestionSelected,
     this.suggestionsCallback,
+    this.onBtnCreatePressedCallBack,
     this.itemBuilder,
     this.decoration,
     this.debounceDuration,
@@ -1192,13 +1204,25 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
         ? widget.noItemsFoundBuilder(context)
         : Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              'No Items Found!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Theme.of(context).disabledColor, fontSize: 18.0),
-            ),
-          );
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'No Items Found!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Theme.of(context).disabledColor, fontSize: 18.0),
+                ),
+                FlatButton(
+                  padding: const EdgeInsets.all(8.0),
+                  textColor: Colors.teal,
+                  color: Colors.transparent,
+                  child: Text("Create"),
+                  onPressed: () {
+                    widget.onBtnCreatePressedCallBack();
+                  },
+                )
+              ],
+            ));
   }
 
   Widget createSuggestionsWidget() {
