@@ -262,6 +262,8 @@ class TypeAheadFormField<T> extends FormField<String> {
       String initialValue,
       bool getImmediateSuggestions: false,
       bool autovalidate: false,
+      String notFound,
+      String notFoundButton,
       FormFieldSetter<String> onSaved,
       FormFieldValidator<String> validator,
       ErrorBuilder errorBuilder,
@@ -664,6 +666,10 @@ class TypeAheadField<T> extends StatefulWidget {
   /// Defaults to false
   final bool autoFlipDirection;
 
+  // Not found label and not found button label
+  final String notFound;
+  final String notFoundButton;
+
   /// Creates a [TypeAheadField]
   TypeAheadField(
       {Key key,
@@ -679,6 +685,8 @@ class TypeAheadField<T> extends StatefulWidget {
       this.noItemsFoundBuilder,
       this.errorBuilder,
       this.transitionBuilder,
+      this.notFound,
+      this.notFoundButton,
       this.animationStart: 0.25,
       this.animationDuration: const Duration(milliseconds: 500),
       this.getImmediateSuggestions: false,
@@ -690,7 +698,8 @@ class TypeAheadField<T> extends StatefulWidget {
       this.hideSuggestionsOnKeyboardHide: true,
       this.keepSuggestionsOnLoading: true,
       this.keepSuggestionsOnSuggestionSelected: false,
-      this.autoFlipDirection: false})
+      this.autoFlipDirection: false
+      })
       : assert(suggestionsCallback != null),
         assert(itemBuilder != null),
         assert(onSuggestionSelected != null),
@@ -865,6 +874,8 @@ class _TypeAheadFieldState<T> extends State<TypeAheadField<T>>
         hideOnEmpty: widget.hideOnEmpty,
         hideOnError: widget.hideOnError,
         keepSuggestionsOnLoading: widget.keepSuggestionsOnLoading,
+        notFound: widget.notFound,
+        notFoundButton: widget.notFoundButton,
       );
 
       double w = _suggestionsBox.textBoxWidth;
@@ -950,6 +961,8 @@ class _SuggestionsList<T> extends StatefulWidget {
   final _SuggestionsBox suggestionsBox;
   final TextEditingController controller;
   final bool getImmediateSuggestions;
+  final String notFound;
+  final String notFoundButton;
   final SuggestionSelectionCallback<T> onSuggestionSelected;
   final SuggestionsCallback<T> suggestionsCallback;
   final VoidCallback onBtnCreatePressedCallBack;
@@ -972,6 +985,8 @@ class _SuggestionsList<T> extends StatefulWidget {
     @required this.suggestionsBox,
     this.controller,
     this.getImmediateSuggestions: false,
+    this.notFound,
+    this.notFoundButton,
     this.onSuggestionSelected,
     this.suggestionsCallback,
     this.onBtnCreatePressedCallBack,
@@ -1210,7 +1225,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
                 child: Column(
               children: <Widget>[
                 Text(
-                  'No Items Found!',
+                  widget.notFound ?? 'No Items Found!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Theme.of(context).disabledColor, fontSize: 18.0),
@@ -1222,7 +1237,7 @@ class _SuggestionsListState<T> extends State<_SuggestionsList<T>>
                   padding: const EdgeInsets.all(8.0),
                   textColor: Colors.white,
                   color: Colors.teal,
-                  child: Text("Create"),
+                  child: Text(widget.notFoundButton ?? "Create"),
                   onPressed: () {
                     widget.onBtnCreatePressedCallBack();
                   },
